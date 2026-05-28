@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyStadium - Experiencia en Vivo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="bg-anim">
+        <div class="glow-orb red"></div>
+        <div class="glow-orb blue"></div>
+    </div>
+
+    <nav class="glass-nav">
+        <div class="logo">My<span>Stadium</span></div>
+        <div class="nav-links" id="nav-links">
+            <a href="#" id="nav-login">Iniciar Sesión</a>
+            <a href="#" id="nav-register" class="btn-primary">Registrarse</a>
+        </div>
+        <div class="user-info hidden" id="user-info">
+            <span id="user-email"></span>
+            <a href="#" id="nav-mis-boletos" class="nav-boletos-btn">🎫 Mis Boletos</a>
+            <button id="nav-logout" class="btn-secondary">Salir</button>
+        </div>
+    </nav>
+
+    <main id="app-content">
+        <!-- Auth View -->
+        <section id="view-auth" class="view active fade-in">
+            <div class="auth-card glass-panel">
+                <h2 id="auth-title">Bienvenido a la Música</h2>
+                <p class="subtitle">Ingresa para descubrir los mejores conciertos.</p>
+                <form id="auth-form">
+                    <div class="input-group">
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" required placeholder="tu@correo.com">
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" required placeholder="••••••••">
+                    </div>
+                    <p id="auth-error" class="error-msg"></p>
+                    <button type="submit" class="btn-primary full-width" id="btn-submit">Ingresar</button>
+                </form>
+                <div class="toggle-auth">
+                    <span id="toggle-auth-text">¿No tienes cuenta? <a href="#" id="toggle-auth-link">Regístrate aquí</a></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Catalog View -->
+        <section id="view-catalog" class="view hidden">
+            <div class="catalog-header">
+                <h2>Próximos Conciertos</h2>
+                <button class="btn-primary" id="btn-add-concert" style="display: none;">+ Nuevo</button>
+            </div>
+            <div class="grid" id="concerts-grid">
+                <!-- Se llenará con JS -->
+            </div>
+        </section>
+
+        <!-- Mis Boletos View -->
+        <section id="view-mis-boletos" class="view hidden">
+            <div class="catalog-header">
+                <h2>Mis Boletos</h2>
+                <button id="btn-volver-catalogo" class="btn-volver-catalogo">← Catálogo</button>
+            </div>
+            <div id="boletos-container">
+                <p style="text-align:center; color:#94a3b8">Cargando tus boletos...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Estadio -->
+    <div id="modal-estadio" class="modal-overlay hidden">
+        <div class="modal-content modal-estadio-content">
+            <button class="modal-close" id="btn-cerrar-estadio">&times;</button>
+            <div id="modal-estadio-header">
+                <h2 id="estadio-concierto-nombre"></h2>
+                <p id="estadio-concierto-info"></p>
+            </div>
+            <div id="estadio-svg-container" class="estadio-svg-container"></div>
+            <div id="estadio-seleccion">
+                <div class="estadio-leyenda">
+                    <span><span class="leyenda-color" style="background:var(--heatmap-green)"></span> Disponible</span>
+                    <span><span class="leyenda-color" style="background:var(--heatmap-yellow)"></span> Media</span>
+                    <span><span class="leyenda-color" style="background:var(--heatmap-orange)"></span> Alta</span>
+                    <span><span class="leyenda-color" style="background:var(--heatmap-red)"></span> Casi lleno</span>
+                    <span><span class="leyenda-color" style="background:var(--heatmap-gray)"></span> Agotado</span>
+                </div>
+                <div class="estadio-controls">
+                    <div class="control-group">
+                        <label>Zona:</label>
+                        <span id="estadio-zona-seleccionada">Ninguna</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Cantidad:</label>
+                        <input type="number" id="estadio-cantidad" value="1" min="1" max="10">
+                    </div>
+                    <div class="control-group">
+                        <label>Total:</label>
+                        <span id="estadio-total">$0</span>
+                    </div>
+                </div>
+                <div class="estadio-actions">
+                    <button class="btn-secondary" id="btn-cancelar-compra">Cancelar</button>
+                    <button class="btn-primary" id="btn-aceptar-compra" disabled>Comprar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmacion -->
+    <div id="modal-confirmacion" class="modal-overlay hidden">
+        <div class="modal-content modal-confirmacion-content">
+            <div class="confirmacion-header">
+                <div class="checkmark">&#10003;</div>
+                <h2>Compra Exitosa</h2>
+            </div>
+            <div id="confirmacion-detalles">
+                <p><strong>Concierto:</strong> <span id="conf-concierto"></span></p>
+                <p><strong>Artista:</strong> <span id="conf-artista"></span></p>
+                <p><strong>Zona:</strong> <span id="conf-zona"></span></p>
+                <p><strong>Asiento(s):</strong> <span id="conf-asientos"></span></p>
+                <p><strong>Total:</strong> <span id="conf-total"></span></p>
+                <p><strong>Código:</strong> <span id="conf-codigo"></span></p>
+            </div>
+            <p class="confirmacion-email">Recibo enviado a tu correo</p>
+            <p class="confirmacion-descarga">PDF descargado automáticamente</p>
+            <button class="btn-primary" id="btn-cerrar-confirmacion">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- SVG Tooltip flotante -->
+    <div id="svg-tooltip" class="svg-tooltip hidden"></div>
+
+    <script src="zoneConfig.js"></script>
+    <script src="helpers.js"></script>
+    <script src="socket-events.js"></script>
+    <script src="seat-status.enum.js"></script>
+    <script src="renderers/seatmap.renderer.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

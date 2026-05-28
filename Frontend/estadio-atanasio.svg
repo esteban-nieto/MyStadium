@@ -1,0 +1,84 @@
+<svg id="estadio-atanasio" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="atanasio-bg" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#1e1b4b" />
+      <stop offset="60%" stop-color="#13112e" />
+      <stop offset="100%" stop-color="#0a0a18" />
+    </radialGradient>
+    <radialGradient id="atanasio-cancha" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2d2a5e" />
+      <stop offset="100%" stop-color="#0d0d2b" />
+    </radialGradient>
+    <filter id="atanasio-glow-hover">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#a78bfa" flood-opacity="0.6"/>
+    </filter>
+    <filter id="atanasio-glow-selected">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#fbbf24" flood-opacity="0.8"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="#fff" flood-opacity="0.3"/>
+    </filter>
+    <linearGradient id="atanasio-stage-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4c1d95" />
+      <stop offset="100%" stop-color="#1a0a3e" />
+    </linearGradient>
+    <filter id="atanasio-stage-glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#7c3aed" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <g id="background-layer">
+    <rect width="800" height="600" fill="url(#atanasio-bg)" rx="0" />
+    <ellipse cx="400" cy="350" rx="95" ry="55" fill="url(#atanasio-cancha)" stroke="#312e81" stroke-width="1.5" />
+    <ellipse cx="400" cy="350" rx="75" ry="38" fill="#1e1b4b" stroke="#4338ca" stroke-width="0.5" opacity="0.4" />
+  </g>
+
+  <g id="viewport-layer">
+    <g id="zones-layer">
+      <g id="norte-alta" class="zona-seatmap" data-zona="norte-alta" data-capacity="800">
+        <path d="M 160,35 C 230,5 570,5 640,35 C 620,55 600,70 580,80 C 520,60 280,60 220,80 C 200,70 180,55 160,35 Z" />
+      </g>
+      <g id="sur-alta" class="zona-seatmap" data-zona="sur-alta" data-capacity="800">
+        <path d="M 160,565 C 230,595 570,595 640,565 C 620,545 600,530 580,520 C 520,540 280,540 220,520 C 200,530 180,545 160,565 Z" />
+      </g>
+      <g id="norte-baja" class="zona-seatmap" data-zona="norte-baja" data-capacity="600">
+        <path d="M 220,90 C 280,65 520,65 580,90 C 560,110 540,125 520,135 C 480,120 320,120 280,135 C 260,125 240,110 220,90 Z" />
+      </g>
+      <g id="sur-baja" class="zona-seatmap" data-zona="sur-baja" data-capacity="600">
+        <path d="M 220,510 C 280,535 520,535 580,510 C 560,490 540,475 520,465 C 480,480 320,480 280,465 C 260,475 240,490 220,510 Z" />
+      </g>
+      <g id="oriental-norte" class="zona-seatmap" data-zona="oriental-norte" data-capacity="500">
+        <path d="M 640,35 C 660,55 670,80 670,110 C 650,105 620,95 600,85 C 610,70 620,55 640,35 Z" />
+      </g>
+      <g id="oriental-central" class="zona-seatmap" data-zona="oriental-central" data-capacity="400">
+        <path d="M 670,120 C 680,160 680,240 670,280 C 655,250 640,200 630,170 C 635,150 645,135 670,120 Z" />
+      </g>
+      <g id="oriental-sur" class="zona-seatmap" data-zona="oriental-sur" data-capacity="500">
+        <path d="M 670,490 C 660,520 650,545 640,565 C 620,545 610,530 600,515 C 650,525 665,510 670,490 Z" />
+      </g>
+      <g id="occidental-norte" class="zona-seatmap" data-zona="occidental-norte" data-capacity="500">
+        <path d="M 160,35 C 140,55 130,80 130,110 C 150,105 180,95 200,85 C 190,70 180,55 160,35 Z" />
+      </g>
+      <g id="occidental-central" class="zona-seatmap" data-zona="occidental-central" data-capacity="400">
+        <path d="M 130,120 C 120,160 120,240 130,280 C 145,250 160,200 170,170 C 165,150 155,135 130,120 Z" />
+      </g>
+      <g id="occidental-sur" class="zona-seatmap" data-zona="occidental-sur" data-capacity="500">
+        <path d="M 130,490 C 140,520 150,545 160,565 C 180,545 190,530 200,515 C 150,525 135,510 130,490 Z" />
+      </g>
+      <g id="palcos" class="zona-seatmap" data-zona="palcos" data-capacity="200">
+        <path d="M 260,140 C 320,130 480,130 540,140 C 530,170 510,195 480,205 C 440,195 360,195 320,205 C 290,195 270,170 260,140 Z" />
+      </g>
+      <g id="vip" class="zona-seatmap" data-zona="vip" data-capacity="100">
+        <path d="M 280,215 C 340,210 460,210 520,215 C 510,245 490,265 460,275 C 440,270 360,270 340,275 C 310,265 290,245 280,215 Z" />
+      </g>
+    </g>
+    <g id="seats-layer"></g>
+  </g>
+
+  <g id="overlay-layer">
+    <ellipse cx="400" cy="350" rx="95" ry="55" fill="url(#atanasio-stage-grad)" filter="url(#atanasio-stage-glow)" opacity="0.85" />
+    <text x="400" y="354" text-anchor="middle" fill="#c4b5fd" font-family="Outfit,sans-serif" font-size="13" font-weight="700" letter-spacing="2">ESCENARIO</text>
+    <g opacity="0.15">
+      <ellipse cx="420" cy="335" rx="60" ry="30" fill="none" stroke="#facc15" stroke-width="0.5" />
+      <ellipse cx="380" cy="365" rx="60" ry="30" fill="none" stroke="#facc15" stroke-width="0.5" />
+    </g>
+  </g>
+</svg>
