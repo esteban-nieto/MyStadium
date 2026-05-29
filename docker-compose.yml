@@ -1,0 +1,125 @@
+services:
+
+  # ─── PostgreSQL ───────────────────────────────────────────
+  auth-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: mystadium_auth
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 240800
+    ports:
+      - "5433:5432"
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  catalogo-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: mystadium_catalogo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 240800
+    ports:
+      - "5434:5432"
+    volumes:
+      - catalogo-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  mapa-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: mystadium_mapa
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 240800
+    ports:
+      - "5435:5432"
+    volumes:
+      - mapa-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ─── Auth ─────────────────────────────────────────────────
+  auth:
+    build: ./Auth
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/mystadium_auth
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 240800
+    depends_on:
+      auth-db:
+        condition: service_healthy
+
+  # ─── Catálogo ─────────────────────────────────────────────
+  catalogo:
+    build: ./Catalogo
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://catalogo-db:5432/mystadium_catalogo
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 240800
+      APP_IMAGES_PATH: /app/imagenes
+    volumes:
+      - ./Frontend/imagenes:/app/imagenes
+    depends_on:
+      catalogo-db:
+        condition: service_healthy
+
+  # ─── Mapa de Calor ────────────────────────────────────────
+  mapadecalor:
+    build: ./MapaDeCalor
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://mapa-db:5432/mystadium_mapa
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 240800
+    depends_on:
+      mapa-db:
+        condition: service_healthy
+
+  # ─── Notifications ────────────────────────────────────────
+  notifications:
+    build: ./Notifications
+    ports:
+      - "8083:8083"
+    environment:
+      SERVER_MAPA_CALOR_URL: http://mapadecalor:8084
+      SERVER_CATALOGO_URL: http://catalogo:8082
+      APP_IMAGES_BASE_PATH: /app/imagenes
+    volumes:
+      - ./Frontend/imagenes:/app/imagenes
+    depends_on:
+      mapadecalor:
+        condition: service_started
+      catalogo:
+        condition: service_started
+
+  # ─── Frontend ─────────────────────────────────────────────
+  frontend:
+    build: ./Frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - auth
+      - catalogo
+      - mapadecalor
+      - notifications
+
+volumes:
+  auth-db-data:
+  catalogo-db-data:
+  mapa-db-data:
