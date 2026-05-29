@@ -26,46 +26,45 @@ public class MapaDeCalorUseCase {
         List<Zona> zonas = new ArrayList<>();
         int pattern = Math.abs(conciertoId.hashCode()) % 3;
 
-        // Cada patrón distribuye las 12 zonas en los 5 estados del heatmap
         int[][] ocupaciones = pattern == 0 ? new int[][]{
-            {0, 800},    // norte-alta      → disponible  (0%)
-            {150, 600},  // norte-baja      → disponible  (25%)
-            {400, 800},  // sur-alta        → media       (50%)
-            {480, 600},  // sur-baja        → alta        (80%)
-            {350, 500},  // oriental-norte  → alta        (70%)
-            {340, 400},  // oriental-central→ casi-lleno  (85%)
-            {500, 500},  // oriental-sur    → agotado     (100%)
-            {200, 500},  // occidental-norte→ media       (40%)
-            {90, 400},   // occidental-cent → disponible  (22%)
-            {500, 500},  // occidental-sur  → agotado     (100%)
-            {170, 200},  // palcos          → casi-lleno  (85%)
-            {50, 100}    // vip             → media       (50%)
+            {0, 800},    // norte-alta
+            {150, 600},  // norte-baja
+            {400, 800},  // sur-alta
+            {480, 600},  // sur-baja
+            {350, 500},  // oriental-norte
+            {340, 400},  // oriental-central
+            {500, 500},  // oriental-sur
+            {200, 500},  // occidental-norte
+            {90, 400},   // occidental-cent
+            {500, 500},  // occidental-sur
+            {170, 200},  // palcos
+            {50, 100}    // vip
         } : pattern == 1 ? new int[][]{
-            {160, 800},  // norte-alta      → disponible  (20%)
-            {450, 600},  // norte-baja      → alta        (75%)
-            {280, 800},  // sur-alta        → media       (35%)
-            {0, 600},    // sur-baja        → disponible  (0%)
-            {250, 500},  // oriental-norte  → media       (50%)
-            {360, 400},  // oriental-central→ casi-lleno  (90%)
-            {0, 500},    // oriental-sur    → disponible  (0%)
-            {500, 500},  // occidental-norte→ agotado     (100%)
-            {340, 400},  // occidental-cent → casi-lleno  (85%)
-            {400, 500},  // occidental-sur  → alta        (80%)
-            {200, 200},  // palcos          → agotado     (100%)
-            {85, 100}    // vip             → casi-lleno  (85%)
+            {160, 800},  // norte-alta
+            {450, 600},  // norte-baja
+            {280, 800},  // sur-alta
+            {0, 600},    // sur-baja
+            {250, 500},  // oriental-norte
+            {360, 400},  // oriental-central
+            {0, 500},    // oriental-sur
+            {500, 500},  // occidental-norte
+            {340, 400},  // occidental-cent
+            {400, 500},  // occidental-sur
+            {200, 200},  // palcos
+            {85, 100}    // vip
         } : new int[][]{
-            {0, 800},    // norte-alta      → disponible  (0%)
-            {0, 600},    // norte-baja      → disponible  (0%)
-            {0, 800},    // sur-alta        → disponible  (0%)
-            {0, 600},    // sur-baja        → disponible  (0%)
-            {500, 500},  // oriental-norte  → agotado     (100%)
-            {350, 400},  // oriental-central→ casi-lleno  (87%)
-            {300, 500},  // oriental-sur    → media       (60%)
-            {350, 500},  // occidental-norte→ alta        (70%)
-            {400, 400},  // occidental-cent → agotado     (100%)
-            {300, 500},  // occidental-sur  → media       (60%)
-            {180, 200},  // palcos          → casi-lleno  (90%)
-            {90, 100}    // vip             → casi-lleno  (90%)
+            {0, 800},    // norte-alta
+            {0, 600},    // norte-baja
+            {0, 800},    // sur-alta
+            {0, 600},    // sur-baja
+            {500, 500},  // oriental-norte
+            {350, 400},  // oriental-central
+            {300, 500},  // oriental-sur
+            {350, 500},  // occidental-norte
+            {400, 400},  // occidental-cent
+            {300, 500},  // occidental-sur
+            {180, 200},  // palcos
+            {90, 100}    // vip
         };
 
         String[] nombres = {

@@ -7,11 +7,9 @@ import org.springframework.stereotype.Component;
 public class EnvioPushGatewayImpl implements EnvioPushGateway {
     @Override
     public boolean enviarPush(String usuarioId, String titulo, String cuerpo) {
-        System.out.println("========================================");
         System.out.println("Enviando notificación push al usuario: " + usuarioId);
         System.out.println("Título: " + titulo);
         System.out.println("Mensaje: " + cuerpo);
-        System.out.println("========================================");
         return true;
     }
 }
