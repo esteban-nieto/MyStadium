@@ -61,4 +61,19 @@ public class ConciertoUseCaseTest {
         doThrow(new RuntimeException("Error")).when(conciertoGateway).eliminarPorId("1");
         assertFalse(conciertoUseCase.eliminarConcierto("1"));
     }
+
+    @Test void guardarConcierto_FallaPorArtistaNulo() {
+        concierto.setArtista(null);
+        assertThrows(IllegalArgumentException.class, () -> conciertoUseCase.guardarConcierto(concierto));
+    }
+
+    @Test void obtenerConciertoPorId_NoEncontrado() {
+        when(conciertoGateway.buscarPorId("99")).thenReturn(null);
+        assertNull(conciertoUseCase.obtenerConciertoPorId("99"));
+    }
+
+    @Test void obtenerTodosLosConciertos_Vacio() {
+        when(conciertoGateway.buscarTodos()).thenReturn(List.of());
+        assertTrue(conciertoUseCase.obtenerTodosLosConciertos().isEmpty());
+    }
 }

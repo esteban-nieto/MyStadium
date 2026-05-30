@@ -79,4 +79,35 @@ class ConciertoControllerTest {
         mockMvc.perform(delete("/api/conciertos/1"))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void obtenerImagenConcierto_NoEncontrado() throws Exception {
+        when(conciertoUseCase.obtenerConciertoPorId("99")).thenReturn(null);
+        mockMvc.perform(get("/api/conciertos/99/imagen"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void obtenerImagenConcierto_ConImagenUrl_ArchivoNoExiste() throws Exception {
+        Concierto c = Concierto.builder().id("1").imagenUrl("noexiste.jpg").artista("Artista").build();
+        when(conciertoUseCase.obtenerConciertoPorId("1")).thenReturn(c);
+        mockMvc.perform(get("/api/conciertos/1/imagen"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void obtenerImagenConcierto_ImagenUrlNulaYArtistaNulo() throws Exception {
+        Concierto c = Concierto.builder().id("1").imagenUrl(null).artista(null).build();
+        when(conciertoUseCase.obtenerConciertoPorId("1")).thenReturn(c);
+        mockMvc.perform(get("/api/conciertos/1/imagen"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void obtenerTodos_Vacio() throws Exception {
+        when(conciertoUseCase.obtenerTodosLosConciertos()).thenReturn(List.of());
+        mockMvc.perform(get("/api/conciertos"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
 }

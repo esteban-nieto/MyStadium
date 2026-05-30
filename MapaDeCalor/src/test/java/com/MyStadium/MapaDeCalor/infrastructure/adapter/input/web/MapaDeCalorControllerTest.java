@@ -84,4 +84,26 @@ class MapaDeCalorControllerTest {
         mockMvc.perform(get("/api/mapa-calor/boleto/MST-999"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void comprarBoletos_CantidadNoNumerica() throws Exception {
+        mockMvc.perform(post("/api/mapa-calor/comprar")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"usuarioId\":\"u1\",\"conciertoId\":\"c1\"," +
+                                "\"conciertoNombre\":\"C\",\"artista\":\"A\",\"zonaId\":\"z1\",\"cantidad\":\"abc\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void comprarBoletos_FechaEventoInvalida() throws Exception {
+        when(mapaDeCalorUseCase.comprarBoletos(anyString(), anyString(), anyString(),
+                anyString(), anyString(), anyInt(), nullable(String.class), any(LocalDateTime.class), nullable(String.class)))
+                .thenThrow(new IllegalArgumentException("Formato de fecha inválido"));
+        mockMvc.perform(post("/api/mapa-calor/comprar")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"usuarioId\":\"u1\",\"conciertoId\":\"c1\"," +
+                                "\"conciertoNombre\":\"C\",\"artista\":\"A\",\"zonaId\":\"z1\"," +
+                                "\"cantidad\":2,\"fechaEvento\":\"fecha-invalida\"}"))
+                .andExpect(status().isBadRequest());
+    }
 }

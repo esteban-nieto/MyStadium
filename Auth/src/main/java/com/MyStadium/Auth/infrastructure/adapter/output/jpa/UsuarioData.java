@@ -13,6 +13,6 @@ public class UsuarioData {
     @Column(unique = true, nullable = false)
     private String correo;
     @Column(nullable = false)
-    private String contrasena;
+    private String contraseña;
     private String rol;
 }

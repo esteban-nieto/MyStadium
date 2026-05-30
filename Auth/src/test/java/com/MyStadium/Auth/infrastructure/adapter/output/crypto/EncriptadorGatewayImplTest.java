@@ -8,7 +8,7 @@ class EncriptadorGatewayImplTest {
 
     @Test
     void encriptar_AgregaPrefijo() {
-        assertEquals("ENCRYPTED_miContrasena", encriptador.encriptar("miContrasena"));
+        assertEquals("ENCRYPTED_miContraseña", encriptador.encriptar("miContraseña"));
     }
 
     @Test
@@ -29,5 +29,15 @@ class EncriptadorGatewayImplTest {
     @Test
     void coinciden_NullEncriptado() {
         assertThrows(NullPointerException.class, () -> encriptador.coinciden("pass", null));
+    }
+
+    @Test
+    void encriptar_Null() {
+        assertEquals("ENCRYPTED_null", encriptador.encriptar(null));
+    }
+
+    @Test
+    void coinciden_NullCruda() {
+        assertFalse(encriptador.coinciden(null, "ENCRYPTED_pass"));
     }
 }

@@ -9,11 +9,11 @@ public class UsuarioMapper {
     public Usuario toModel(UsuarioData data) {
         if (data == null) return null;
         return Usuario.builder().id(data.getId()).correo(data.getCorreo())
-                .contrasena(data.getContrasena()).rol(data.getRol()).build();
+                .contraseña(data.getContraseña()).rol(data.getRol()).build();
     }
     public UsuarioData toData(Usuario model) {
         if (model == null) return null;
         return UsuarioData.builder().id(model.getId()).correo(model.getCorreo())
-                .contrasena(model.getContrasena()).rol(model.getRol()).build();
+                .contraseña(model.getContraseña()).rol(model.getRol()).build();
     }
 }

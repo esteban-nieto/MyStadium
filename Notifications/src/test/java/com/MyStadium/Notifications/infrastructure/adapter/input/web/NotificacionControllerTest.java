@@ -102,4 +102,45 @@ class NotificacionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].usuarioId").value("u1"));
     }
+
+    @Test
+    void enviarRecuperacion_Falla() throws Exception {
+        when(notificacionUseCase.enviarEmailRecuperacion("test@test.com", "link"))
+                .thenThrow(new IllegalArgumentException("Email requerido"));
+        mockMvc.perform(post("/api/notificaciones/enviar-recuperacion")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"test@test.com\",\"enlaceRecuperacion\":\"link\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void enviarReciboCompra_Falla() throws Exception {
+        when(notificacionUseCase.enviarReciboCompra(any()))
+                .thenThrow(new IllegalArgumentException("Email requerido"));
+        mockMvc.perform(post("/api/notificaciones/recibo-compra")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"emailUsuario\":\"test@test.com\",\"codigoOrden\":\"ORD-001\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void descargarPdfCombinado_Exito() throws Exception {
+        when(notificacionUseCase.obtenerPdfMultiple(List.of("MST-001", "MST-002")))
+                .thenReturn(new byte[]{25,80,68,70});
+        mockMvc.perform(post("/api/notificaciones/pdf-combinado")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"codigos\":[\"MST-001\",\"MST-002\"]}"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_PDF));
+    }
+
+    @Test
+    void descargarPdfCombinado_NoEncontrado() throws Exception {
+        when(notificacionUseCase.obtenerPdfMultiple(List.of("MST-999")))
+                .thenReturn(null);
+        mockMvc.perform(post("/api/notificaciones/pdf-combinado")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"codigos\":[\"MST-999\"]}"))
+                .andExpect(status().isNotFound());
+    }
 }

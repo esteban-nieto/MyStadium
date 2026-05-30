@@ -23,7 +23,7 @@ public class UsuarioUseCaseTest {
 
     @BeforeEach
     void setUp() {
-        usuario = Usuario.builder().id("1").correo("test@test.com").contrasena("1234").build();
+        usuario = Usuario.builder().id("1").correo("test@test.com").contraseña("1234").build();
     }
 
     @Test void guardarUsuario_Exito() {
@@ -41,7 +41,7 @@ public class UsuarioUseCaseTest {
     }
 
     @Test void guardarUsuario_FallaPorContrasenaNula() {
-        usuario.setContrasena(null);
+        usuario.setContraseña(null);
         assertThrows(NullPointerException.class, () -> usuarioUseCase.guardarUsuario(usuario));
     }
 
@@ -90,5 +90,22 @@ public class UsuarioUseCaseTest {
         when(usuarioGateway.buscarPorCorreo("test@test.com")).thenReturn(usuario);
         when(encriptadorGateway.coinciden("wrong", "1234")).thenReturn(false);
         assertThrows(RuntimeException.class, () -> usuarioUseCase.iniciarSesion("test@test.com", "wrong"));
+    }
+
+    @Test void guardarUsuario_VerificaContrasenaEncriptada() {
+        when(encriptadorGateway.encriptar("1234")).thenReturn("ENCRYPTED_1234");
+        when(usuarioGateway.guardarUsuario(any(Usuario.class))).thenAnswer(i -> i.getArgument(0));
+        Usuario saved = usuarioUseCase.guardarUsuario(usuario);
+        assertEquals("ENCRYPTED_1234", saved.getContraseña());
+    }
+
+    @Test void iniciarSesion_FallaPorContrasenaNula() {
+        assertThrows(RuntimeException.class, () -> usuarioUseCase.iniciarSesion("test@test.com", null));
+    }
+
+    @Test void iniciarSesion_FallaUsuarioSinId() {
+        usuario.setId(null);
+        when(usuarioGateway.buscarPorCorreo("test@test.com")).thenReturn(usuario);
+        assertThrows(RuntimeException.class, () -> usuarioUseCase.iniciarSesion("test@test.com", "1234"));
     }
 }

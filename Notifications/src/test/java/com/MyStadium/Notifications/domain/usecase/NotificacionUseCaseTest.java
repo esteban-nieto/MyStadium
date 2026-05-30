@@ -167,4 +167,36 @@ public class NotificacionUseCaseTest {
     @Test void obtenerHistorialNotificaciones_Vacio() {
         assertTrue(notificacionUseCase.obtenerHistorialNotificaciones("user-unknown").isEmpty());
     }
+
+    @Test void obtenerPdfMultiple_Exito() {
+        when(ticketPdfGenerator.generate(any())).thenReturn("PDF-CONTENT".getBytes());
+        when(restTemplate.getForObject(contains("/boleto/MST-001"), eq(Map.class)))
+                .thenReturn(Map.of("conciertoNombre","C","artista","A","zonaNombre","Z",
+                        "asiento","A1","totalPagado",100.0,"codigoUnico","MST-001","usuarioId","u1"));
+        when(restTemplate.getForObject(contains("/boleto/MST-002"), eq(Map.class)))
+                .thenReturn(Map.of("conciertoNombre","C","artista","A","zonaNombre","Z",
+                        "asiento","A2","totalPagado",100.0,"codigoUnico","MST-002","usuarioId","u1"));
+        byte[] pdf = notificacionUseCase.obtenerPdfMultiple(List.of("MST-001", "MST-002"));
+        assertNotNull(pdf);
+        verify(ticketPdfGenerator, times(1)).generate(any());
+    }
+
+    @Test void obtenerPdfMultiple_ConBoletoNulo() {
+        when(restTemplate.getForObject(contains("/boleto/MST-001"), eq(Map.class)))
+                .thenReturn(null);
+        when(restTemplate.getForObject(contains("/boleto/MST-002"), eq(Map.class)))
+                .thenReturn(Map.of("conciertoNombre","C","artista","A","zonaNombre","Z",
+                        "asiento","A2","totalPagado",100.0,"codigoUnico","MST-002","usuarioId","u1"));
+        when(ticketPdfGenerator.generate(any())).thenReturn("PDF".getBytes());
+        assertNotNull(notificacionUseCase.obtenerPdfMultiple(List.of("MST-001", "MST-002")));
+    }
+
+    @Test void obtenerPdfMultiple_Vacio() {
+        assertNull(notificacionUseCase.obtenerPdfMultiple(List.of()));
+    }
+
+    @Test void obtenerPdfMultiple_TodosNulos() {
+        when(restTemplate.getForObject(anyString(), eq(Map.class))).thenReturn(null);
+        assertNull(notificacionUseCase.obtenerPdfMultiple(List.of("MST-X")));
+    }
 }

@@ -143,4 +143,28 @@ class MapaDeCalorUseCaseTest {
         when(boletoGateway.buscarPorCodigo("MST-999")).thenReturn(Optional.empty());
         assertFalse(useCase.obtenerBoletoPorCodigo("MST-999").isPresent());
     }
+
+    @Test
+    void comprarBoletos_TipoEntradaNulo_UsaGeneral() {
+        when(zonaGateway.buscarPorId("z1")).thenReturn(Optional.of(zona));
+        when(boletoGateway.guardar(any(Boleto.class))).thenAnswer(i -> i.getArgument(0));
+        assertDoesNotThrow(() -> useCase.comprarBoletos("u1", "c1", "C", "A", "z1", 1,
+                "Estadio", fechaEvento, null));
+    }
+
+    @Test
+    void comprarBoletos_TipoEntradaInvalido_UsaGeneral() {
+        when(zonaGateway.buscarPorId("z1")).thenReturn(Optional.of(zona));
+        when(boletoGateway.guardar(any(Boleto.class))).thenAnswer(i -> i.getArgument(0));
+        assertDoesNotThrow(() -> useCase.comprarBoletos("u1", "c1", "C", "A", "z1", 1,
+                "Estadio", fechaEvento, "INVALIDO"));
+    }
+
+    @Test
+    void comprarBoletos_CantidadCero() {
+        when(zonaGateway.buscarPorId("z1")).thenReturn(Optional.of(zona));
+        Map<String, Object> resultado = useCase.comprarBoletos("u1", "c1", "C", "A", "z1", 0,
+                "Estadio", fechaEvento, "VIP");
+        assertEquals(0, ((List<?>) resultado.get("boletos")).size());
+    }
 }

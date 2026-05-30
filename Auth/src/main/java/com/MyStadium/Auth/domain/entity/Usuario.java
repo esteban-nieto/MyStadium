@@ -6,6 +6,6 @@ import lombok.*;
 public class Usuario {
     private String id;
     private String correo;
-    private String contrasena;
+    private String contraseña;
     private String rol;
 }

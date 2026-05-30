@@ -10,11 +10,11 @@ class UsuarioMapperTest {
 
     @Test
     void toModel_MapeaTodosLosCampos() {
-        UsuarioData data = UsuarioData.builder().id("1").correo("a@b.com").contrasena("secret").rol("USER").build();
+        UsuarioData data = UsuarioData.builder().id("1").correo("a@b.com").contraseña("secret").rol("USER").build();
         Usuario model = mapper.toModel(data);
         assertEquals("1", model.getId());
         assertEquals("a@b.com", model.getCorreo());
-        assertEquals("secret", model.getContrasena());
+        assertEquals("secret", model.getContraseña());
         assertEquals("USER", model.getRol());
     }
 
@@ -25,11 +25,11 @@ class UsuarioMapperTest {
 
     @Test
     void toData_MapeaTodosLosCampos() {
-        Usuario model = Usuario.builder().id("1").correo("a@b.com").contrasena("secret").rol("ADMIN").build();
+        Usuario model = Usuario.builder().id("1").correo("a@b.com").contraseña("secret").rol("ADMIN").build();
         UsuarioData data = mapper.toData(model);
         assertEquals("1", data.getId());
         assertEquals("a@b.com", data.getCorreo());
-        assertEquals("secret", data.getContrasena());
+        assertEquals("secret", data.getContraseña());
         assertEquals("ADMIN", data.getRol());
     }
 
@@ -44,7 +44,17 @@ class UsuarioMapperTest {
         Usuario model = mapper.toModel(data);
         assertNull(model.getId());
         assertNull(model.getCorreo());
-        assertNull(model.getContrasena());
+        assertNull(model.getContraseña());
         assertNull(model.getRol());
+    }
+
+    @Test
+    void toData_CamposNulos() {
+        Usuario model = Usuario.builder().build();
+        UsuarioData data = mapper.toData(model);
+        assertNull(data.getId());
+        assertNull(data.getCorreo());
+        assertNull(data.getContraseña());
+        assertNull(data.getRol());
     }
 }

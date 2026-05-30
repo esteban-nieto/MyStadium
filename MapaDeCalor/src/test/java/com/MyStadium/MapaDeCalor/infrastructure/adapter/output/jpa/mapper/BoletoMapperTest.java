@@ -4,6 +4,7 @@ import com.MyStadium.MapaDeCalor.domain.entity.Boleto;
 import com.MyStadium.MapaDeCalor.infrastructure.adapter.output.jpa.BoletoData;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
+import com.MyStadium.MapaDeCalor.domain.entity.TicketType;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoletoMapperTest {
@@ -49,5 +50,50 @@ class BoletoMapperTest {
     @Test
     void toData_Null() {
         assertNull(mapper.toData(null));
+    }
+
+    @Test
+    void toModel_ConTipoEntrada() {
+        BoletoData data = BoletoData.builder().id("1").codigoUnico("MST-001")
+                .usuarioId("u1").conciertoId("c1").conciertoNombre("C").artista("A")
+                .zonaNombre("VIP").zonaPrecio(250000.0).asiento("A1")
+                .totalPagado(250000.0).fechaCompra(LocalDateTime.now())
+                .tipoEntrada("VIP").build();
+        Boleto model = mapper.toModel(data);
+        assertEquals(TicketType.VIP, model.getTipoEntrada());
+    }
+
+    @Test
+    void toModel_TipoEntradaNulo() {
+        BoletoData data = BoletoData.builder().id("1").codigoUnico("MST-001")
+                .usuarioId("u1").conciertoId("c1").build();
+        Boleto model = mapper.toModel(data);
+        assertNull(model.getTipoEntrada());
+    }
+
+    @Test
+    void toModel_TipoEntradaInvalidoLanzaExcepcion() {
+        BoletoData data = BoletoData.builder().id("1").codigoUnico("MST-001")
+                .tipoEntrada("INVALIDO").build();
+        assertThrows(IllegalArgumentException.class, () -> mapper.toModel(data));
+    }
+
+    @Test
+    void toData_ConTipoEntrada() {
+        Boleto model = Boleto.builder().id("1").codigoUnico("MST-001")
+                .usuarioId("u1").conciertoId("c1").conciertoNombre("C").artista("A")
+                .zonaNombre("VIP").zonaPrecio(250000.0).asiento("A1")
+                .totalPagado(250000.0).fechaCompra(LocalDateTime.now())
+                .tipoEntrada(TicketType.PALCO).build();
+        BoletoData data = mapper.toData(model);
+        assertEquals("PALCO", data.getTipoEntrada());
+    }
+
+    @Test
+    void toData_TipoEntradaNulo() {
+        Boleto model = Boleto.builder().id("1").codigoUnico("MST-001")
+                .usuarioId("u1").conciertoId("c1").build();
+        BoletoData data = mapper.toData(model);
+        assertNull(data.getTipoEntrada());
     }
 }

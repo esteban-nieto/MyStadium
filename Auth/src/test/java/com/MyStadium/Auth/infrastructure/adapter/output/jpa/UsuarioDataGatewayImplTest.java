@@ -23,8 +23,8 @@ class UsuarioDataGatewayImplTest {
 
     @BeforeEach
     void setUp() {
-        usuario = Usuario.builder().id("1").correo("a@b.com").contrasena("secret").build();
-        data = UsuarioData.builder().id("1").correo("a@b.com").contrasena("secret").build();
+        usuario = Usuario.builder().id("1").correo("a@b.com").contraseña("secret").build();
+        data = UsuarioData.builder().id("1").correo("a@b.com").contraseña("secret").build();
     }
 
     @Test
@@ -70,5 +70,12 @@ class UsuarioDataGatewayImplTest {
         doNothing().when(repository).deleteById("1");
         gateway.eliminarUsuarioPorId("1");
         verify(repository).deleteById("1");
+    }
+
+    @Test
+    void guardarUsuario_ConMapperNull() {
+        when(mapper.toData(usuario)).thenReturn(null);
+        when(repository.save(null)).thenThrow(new RuntimeException("Entity must not be null"));
+        assertThrows(RuntimeException.class, () -> gateway.guardarUsuario(usuario));
     }
 }

@@ -64,7 +64,7 @@ authForm.addEventListener('submit', async (e) => {
 
   try {
     if (isLoginMode) {
-      const res = await fetch(`${API_AUTH}/iniciar-sesion?correo=${encodeURIComponent(email)}&contrasena=${encodeURIComponent(password)}`, { method: 'POST' });
+      const res = await fetch(`${API_AUTH}/iniciar-sesion?correo=${encodeURIComponent(email)}&contraseña=${encodeURIComponent(password)}`, { method: 'POST' });
       const text = await res.text();
       if (!res.ok) throw new Error(text);
       handleLoginSuccess(email, null);
@@ -72,7 +72,7 @@ authForm.addEventListener('submit', async (e) => {
       const res = await fetch(`${API_AUTH}/registrar`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ correo: email, contrasena: password, rol: 'USER' })
+        body: JSON.stringify({ correo: email, contraseña: password, rol: 'USER' })
       });
       if (!res.ok) { const text = await res.text(); throw new Error(text); }
       const user = await res.json();

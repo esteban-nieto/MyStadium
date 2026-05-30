@@ -5,10 +5,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EncriptadorGatewayImpl implements EncriptadorGateway {
-    @Override public String encriptar(String contrasena) {
-        return "ENCRYPTED_" + contrasena;
+    @Override public String encriptar(String contraseña) {
+        return "ENCRYPTED_" + contraseña;
     }
-    @Override public boolean coinciden(String contrasenaCruda, String contrasenaEncriptada) {
-        return contrasenaEncriptada.equals(encriptar(contrasenaCruda));
+    @Override public boolean coinciden(String contraseñaCruda, String contraseñaEncriptada) {
+        return contraseñaEncriptada.equals(encriptar(contraseñaCruda));
     }
 }
