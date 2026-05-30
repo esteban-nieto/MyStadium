@@ -22,8 +22,11 @@ public class UsuarioController {
     }
 
     @PostMapping("/iniciar-sesion")
-    public ResponseEntity<?> iniciarSesion(@RequestParam String correo, @RequestParam String contraseña) {
-        try { return ResponseEntity.ok(usuarioUseCase.iniciarSesion(correo, contraseña)); }
-        catch (Exception e) { return ResponseEntity.badRequest().body(e.getMessage()); }
+    public ResponseEntity<?> iniciarSesion(@RequestBody java.util.Map<String, String> body) {
+        try {
+            String correo = body.get("correo");
+            String contraseña = body.get("contraseña");
+            return ResponseEntity.ok(usuarioUseCase.iniciarSesion(correo, contraseña));
+        } catch (Exception e) { return ResponseEntity.badRequest().body(e.getMessage()); }
     }
 }

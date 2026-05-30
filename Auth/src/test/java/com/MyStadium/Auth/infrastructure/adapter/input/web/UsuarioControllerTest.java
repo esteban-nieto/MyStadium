@@ -55,8 +55,8 @@ class UsuarioControllerTest {
     void iniciarSesion_Exito() throws Exception {
         when(usuarioUseCase.iniciarSesion("test@test.com", "1234")).thenReturn("Login exitoso");
         mockMvc.perform(post("/api/auth/iniciar-sesion")
-                        .param("correo", "test@test.com")
-                        .param("contraseña", "1234"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"correo\":\"test@test.com\",\"contraseña\":\"1234\"}"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Login exitoso"));
     }
@@ -66,8 +66,8 @@ class UsuarioControllerTest {
         when(usuarioUseCase.iniciarSesion("test@test.com", "wrong"))
                 .thenThrow(new RuntimeException("Contraseña incorrecta"));
         mockMvc.perform(post("/api/auth/iniciar-sesion")
-                        .param("correo", "test@test.com")
-                        .param("contraseña", "wrong"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"correo\":\"test@test.com\",\"contraseña\":\"wrong\"}"))
                 .andExpect(status().isBadRequest());
     }
 }

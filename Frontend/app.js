@@ -64,7 +64,11 @@ authForm.addEventListener('submit', async (e) => {
 
   try {
     if (isLoginMode) {
-      const res = await fetch(`${API_AUTH}/iniciar-sesion?correo=${encodeURIComponent(email)}&contraseña=${encodeURIComponent(password)}`, { method: 'POST' });
+      const res = await fetch(`${API_AUTH}/iniciar-sesion`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ correo: email, contraseña: password })
+      });
       const text = await res.text();
       if (!res.ok) throw new Error(text);
       handleLoginSuccess(email, null);
