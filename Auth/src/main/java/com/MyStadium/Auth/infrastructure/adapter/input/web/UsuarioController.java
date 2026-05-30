@@ -15,8 +15,15 @@ public class UsuarioController {
     private final UsuarioUseCase usuarioUseCase;
 
     @PostMapping("/registrar")
-    public ResponseEntity<?> registrar(@RequestBody Usuario usuario) {
-        try { return ResponseEntity.ok(usuarioUseCase.guardarUsuario(usuario)); }
+    public ResponseEntity<?> registrar(@RequestBody java.util.Map<String, String> body) {
+        try {
+            Usuario usuario = Usuario.builder()
+                    .correo(body.get("correo"))
+                    .contraseña(body.get("contraseña"))
+                    .rol(body.getOrDefault("rol", "USER"))
+                    .build();
+            return ResponseEntity.ok(usuarioUseCase.guardarUsuario(usuario));
+        }
         catch (DataIntegrityViolationException e) { return ResponseEntity.badRequest().body("El usuario ya existe"); }
         catch (Exception e) { return ResponseEntity.badRequest().body(e.getMessage()); }
     }
